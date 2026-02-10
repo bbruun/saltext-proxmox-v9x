@@ -96,40 +96,20 @@ def clone(kwargs=None, call=None):  # pylint: disable=unused-argument
            * ``https://<PROXMOX_URL>/pve-docs/api-viewer/index.html#/nodes/{node}/qemu/{vmid}/clone``
            * ``https://<PROXMOX_URL>/pve-docs/api-viewer/index.html#/nodes/{node}/lxc/{vmid}/clone``
 
-
-    **Required**
-        || Name || Type || Default || Format || Description ||
-        | newid | integer |  | <integer> (100 - 999999999) | VMID for the clone. |
-        | node  | string  |  | <string> | The cluster node name. |
-        | vmid  | integer |  | <integer> (100 - 999999999) | The (unique) ID of the VM. |
-    **Optional**
-        || Name       || Type  || Default || Format || Description ||
-        | description | string | | <string>     | Description for the new VM. |
-        | full        | boolean| | <boolean>    | Create a full copy of all disks. This is always done when you clone a normal VM. For VM templates, we try to create a linked clone by default. |
-        | name        | string | | <string>     | Set a name for the new VM. |
-        | pool        | string | | <string>     | Add the new VM to the specified pool. |
-        | snapname    | string | | <string>     | The name of the snapshot. |
-        | storage     | string | | <storage ID> | Target storage for full clone. |
-        | target      | string | | <string>     |   Target node. Only allowed if the original VM is on shared storage. |
-        | format      | enum   | | <raw|qcow2|vmdk> | Target format for file storage. Only valid for full clone. |
-        | bwlimit     | integer| <clone limit from datacenter or storage config> | <integer> (0 - N) | Override I/O bandwidth limit (in KiB/s). |
-
     Eg.:
-        {
-            "newid": 1999,        # vmid for the new VM
-            "node": "pm1",        # Proxmox node to clone to
-            "vmid": 100,          # template to clone from
-            "name": "new-server", # Name of new server
-            "description": "A clone of vmid 100",
-        }
 
     CLI Example:
 
     .. code-block:: bash
 
-        raise SaltCloudSystemExit(
-            "The clone function must be called with -f or --function"
-        )
+        kwargs = {
+                    "newid": 1999,        # vmid for the new VM
+                    "node": "pm1",        # Proxmox node to clone to
+                    "vmid": 100,          # template to clone from
+                    "name": "new-server", # Name of new server
+                    "description": "A clone of vmid 100",
+        }
+        create(kwargs)
     """
     if not isinstance(kwargs, dict):
         kwargs = {}
@@ -162,16 +142,7 @@ def reconfigure(name=None, kwargs=None):
     For additional parameters please check the Proxmox API documentation:
         * ``https://<PROXMOX_URL>/pve-docs/api-viewer/index.html#/nodes/{node}/lxc/{vmid}/config``
         * ``https://<PROXMOX_URL>/pve-docs/api-viewer/index.html#/nodes/{node}/qemu/{vmid}/config``
-
-    CLI Example:
-
-    .. code-block:: bash
-
-        raise SaltCloudSystemExit(
-            "The reconfigure action must be called with -a or --action."
-        )
     """
-
     vm = _get_vm_by_name(name)
 
     _query("PUT", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/config", kwargs)
@@ -386,12 +357,12 @@ def show_instance(name=None, call=None):
 
         salt-cloud -a show_instance vm_name
     """
-    if call != "action":
-        raise SaltCloudSystemExit("The show_instance action must be called with -a or --action.")
-
     for k, v in list_nodes_full().items():
         if k == name:
             return v
+
+    if call is None:
+        call = None
 
     raise SaltCloudNotFound(f"The specified VM named '{name}' could not be found.")
 
@@ -410,20 +381,13 @@ def start(name=None, kwargs=None, call=None):
         * ``https://<PROXMOX_URL>/pve-docs/api-viewer/index.html#/nodes/{node}/lxc/{vmid}/status/start``
         * ``https://<PROXMOX_URL>/pve-docs/api-viewer/index.html#/nodes/{node}/qemu/{vmid}/status/start``
 
-    CLI Example:
-
-    .. code-block:: bash
-
-        salt-cloud -a start vm_name
     """
-
-    if call != "action":
-        raise SaltCloudSystemExit("The start action must be called with -a or --action.")
-
-    print("start(): ", f"name={name} kwargs={kwargs}")
     _set_vm_status(name, "start", kwargs)
 
     _wait_for_vm_status(name, "running", timeout=300, interval=1)
+
+    if call is None:
+        call = None
 
     return {
         "success": True,
@@ -737,6 +701,16 @@ def _wait_for_vm_status(name, status, timeout=300, interval=0.2):
     while time.time() < start_time + timeout:
         response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
 
+        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
+    while time.time() < start_time + timeout:
+        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
+
+        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
+    while time.time() < start_time + timeout:
+        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
+
+        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
+    while time.time() < start_time + timeout:
         response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
     while time.time() < start_time + timeout:
         response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
