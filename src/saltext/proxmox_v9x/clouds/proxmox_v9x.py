@@ -30,7 +30,7 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
-__virtualname__ = "proxmox"
+__virtualname__ = "proxmox_v9x"
 
 
 def __virtual__():
