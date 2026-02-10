@@ -297,15 +297,14 @@ def avail_images(kwargs=None, call=None):
 
 def list_nodes(call=None):
     """
-    Return a list of the VMs that are managed by the provider
+    Return a list of the VMs that are managed by the provider, with sparse configuration details
 
     CLI Example:
 
     .. code-block:: bash
 
-        raise SaltCloudSystemExit(
-            "The list_nodes function must be called with -f or --function."
-        )
+        salt-cloud -F
+        salt-cloud -f list_nodes my-proxmox-config
     """
     # Linter issue
     if call is None:
@@ -315,22 +314,18 @@ def list_nodes(call=None):
 
     ret = {}
     for vm in vms:
-        if not "name" in vm or vm["name"] is not None or vm["name"] == "":
-            print("VM name", f"{vm}", "not found")
-            continue
         name = vm["name"]
 
+        # Add extra information from the VM to the output
         ret[name] = {}
         ret[name]["id"] = str(vm["vmid"])
-        ret[name]["image"] = ""  # proxmox does not carry that information
-        ret[name]["size"] = ""  # proxmox does not have VM sizes like AWS (e.g: t2-small)
         ret[name]["state"] = str(vm["status"])
+        ret[name]["uptime"] = str(vm["uptime"])
+        ret[name]["maxcpu"] = str(vm["maxcpu"])
+        ret[name]["memory"] = str(int(vm["maxmem"] / 1024 / 1000))
+        ret[name]["disk"] = str(int(vm["maxdisk"] / 1024 / 1024 / 1000))
 
-        config = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/config")
-        private_ips, public_ips = _parse_ips(config, vm["type"])
-
-        ret[name]["private_ips"] = private_ips
-        ret[name]["public_ips"] = public_ips
+        # config = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/config")
 
     return ret
 
@@ -368,6 +363,8 @@ def list_nodes_full(call=None):
 def list_nodes_select(call=None):
     """
     Return a list of the VMs that are managed by the provider, with select fields
+
+    Not implemented yet
     """
     return __utils__["cloud.list_nodes_select"](  # pylint: disable=undefined-variable
         list_nodes_full(),
@@ -588,7 +585,7 @@ def _get_api_token():
     tokenid = config.get_cloud_config_value(
         "tokenid", get_configured_provider(), __opts__, search_global=False
     )
-    # return f"{username}!{token}"
+
     return f"{username}!{tokenid}={token}"
 
 
