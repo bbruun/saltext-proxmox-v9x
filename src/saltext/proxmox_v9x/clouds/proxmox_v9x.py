@@ -670,54 +670,6 @@ def _wait_for_vm_status(name, status, timeout=300, interval=0.2):
     start_time = time.time()
     while time.time() < start_time + timeout:
         response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    response = None
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-    start_time = time.time()
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
-    while time.time() < start_time + timeout:
-        response = _query("GET", f"nodes/{vm['node']}/{vm['type']}/{vm['vmid']}/status/current")
         print("status for", f"name={vm['vmid']} vmid={vm['vmid']} status={status}")
         if response["status"] == status:
             return True
